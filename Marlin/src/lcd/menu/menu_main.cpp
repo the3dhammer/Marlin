@@ -68,9 +68,21 @@
 
 void menu_tune();
 void menu_cancelobject();
-void menu_motion();
-void menu_temperature();
+//void menu_motion();
+void menu_prepare();
+//void menu_temperature();
 void menu_configuration();
+
+#if HAS_LEVELING
+  #include "../../module/planner.h"
+  #include "../../feature/bedlevel/bedlevel.h"
+#endif
+
+#if ENABLED(AUTO_BED_LEVELING_UBL)
+  void _lcd_ubl_level_bed();
+#elif ENABLED(LCD_BED_LEVELING)
+  void menu_bed_leveling();
+#endif
 
 #if HAS_POWER_MONITOR
   void menu_power_monitor();
@@ -88,17 +100,17 @@ void menu_configuration();
   void menu_info();
 #endif
 
-#if EITHER(LED_CONTROL_MENU, CASE_LIGHT_MENU)
-  void menu_led();
-#endif
+//#if EITHER(LED_CONTROL_MENU, CASE_LIGHT_MENU)
+  //void menu_led();
+//#endif
 
 #if HAS_CUTTER
   void menu_spindle_laser();
 #endif
 
-#if ENABLED(PREHEAT_SHORTCUT_MENU_ITEM)
-  void menu_preheat_only();
-#endif
+//#if ENABLED(PREHEAT_SHORTCUT_MENU_ITEM)
+  //void menu_preheat_only();
+//#endif
 
 #if HAS_MULTI_LANGUAGE
   void menu_language();
@@ -233,6 +245,8 @@ void menu_main() {
   START_MENU();
   BACK_ITEM(MSG_INFO_SCREEN);
 
+  SUBMENU(MSG_PREPARE, menu_prepare);
+
   #if ENABLED(SDSUPPORT)
 
     #if !defined(MEDIA_MENU_AT_TOP) && !HAS_ENCODER_WHEEL
@@ -310,20 +324,26 @@ void menu_main() {
       ACTION_ITEM(MSG_HOST_START_PRINT, hostui.start);
     #endif
 
-    #if ENABLED(PREHEAT_SHORTCUT_MENU_ITEM)
-      SUBMENU(MSG_PREHEAT_CUSTOM, menu_preheat_only);
-    #endif
+    //#if ENABLED(PREHEAT_SHORTCUT_MENU_ITEM)
+      //SUBMENU(MSG_PREHEAT_CUSTOM, menu_preheat_only);
+    //#endif
 
-    SUBMENU(MSG_MOTION, menu_motion);
+    // SUBMENU(MSG_MOTION, menu_motion);
+    #if ENABLED(LCD_BED_LEVELING)
+
+      if (!g29_in_progress)
+        SUBMENU(MSG_BED_LEVELING, menu_bed_leveling);
+      
+    #endif
   }
 
   #if HAS_CUTTER
     SUBMENU(MSG_CUTTER(MENU), STICKY_SCREEN(menu_spindle_laser));
   #endif
 
-  #if HAS_TEMPERATURE
-    SUBMENU(MSG_TEMPERATURE, menu_temperature);
-  #endif
+  //#if HAS_TEMPERATURE
+    //SUBMENU(MSG_TEMPERATURE, menu_temperature);
+  //#endif
 
   #if HAS_POWER_MONITOR
     SUBMENU(MSG_POWER_MONITOR, menu_power_monitor);
@@ -364,9 +384,9 @@ void menu_main() {
     SUBMENU(MSG_INFO_MENU, menu_info);
   #endif
 
-  #if EITHER(LED_CONTROL_MENU, CASE_LIGHT_MENU)
-    SUBMENU(MSG_LEDS, menu_led);
-  #endif
+  //#if EITHER(LED_CONTROL_MENU, CASE_LIGHT_MENU)
+    //SUBMENU(MSG_LEDS, menu_led);
+  //#endif
 
   //
   // Switch power on/off

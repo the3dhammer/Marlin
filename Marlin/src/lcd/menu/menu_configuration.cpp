@@ -59,6 +59,12 @@
 
 #define HAS_DEBUG_MENU ENABLED(LCD_PROGRESS_BAR_TEST)
 
+void menu_temperature();
+
+#if EITHER(LED_CONTROL_MENU, CASE_LIGHT_MENU)
+  void menu_led();
+#endif
+
 void menu_advanced_settings();
 #if EITHER(DELTA_CALIBRATION_MENU, DELTA_AUTO_CALIBRATION)
   void menu_delta_calibrate();
@@ -473,6 +479,10 @@ void menu_configuration() {
   START_MENU();
   BACK_ITEM(MSG_MAIN);
 
+  #if HAS_TEMPERATURE
+    SUBMENU(MSG_TEMPERATURE, menu_temperature);
+  #endif
+
   //
   // Debug Menu when certain options are enabled
   //
@@ -577,6 +587,10 @@ void menu_configuration() {
 
   #if ENABLED(SOUND_MENU_ITEM)
     EDIT_ITEM(bool, MSG_SOUND, &ui.sound_on, []{ ui.chirp(); });
+  #endif
+
+  #if EITHER(LED_CONTROL_MENU, CASE_LIGHT_MENU)
+    SUBMENU(MSG_LEDS, menu_led);
   #endif
 
   #if ENABLED(EEPROM_SETTINGS)
