@@ -35,20 +35,28 @@
  * from where the binary was downloaded or the source code was compiled.
  */
 
-#if(ENABLED(MACHINESV02))
+#if(ENABLED(MACHINESV02_1) || ENABLED(MACHINESV02_2) || ENABLED(MACHINESV02_3) || ENABLED(MACHINESV02_4))
   #define VerChar1 "SV02"
 #endif
 
 #if(ENABLED(BLTOUCH))
   #define VerChar2 "BLT"
+#else
+  #define VerChar2 "NP"
 #endif
 
 #if(ENABLED(AUTO_BED_LEVELING_BILINEAR))
   #define VerChar3 "BIL"
+#elif(ENABLED(MESH_BED_LEVELING))
+  #define VerChar3 "MSH"
+#else
+  #define VerChar3 "MAN"
 #endif
 
 #if(ENABLED(MKS_MINI_12864_V3))
   #define VerChar4 "MKSMV3"
+#elif(ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER))
+  #define VerChar4 "12864"
 #endif
 
 #define DETAILED_BUILD_VERSION SHORT_BUILD_VERSION " T3DH " VerChar1 VerChar2 VerChar3 VerChar4

@@ -78,6 +78,16 @@
   #define SERVO3_PIN                           4
 #endif
 
+// Define digital pin 2 for the filament runout sensor 1.
+#ifndef FIL_RUNOUT1_PIN
+  #define FIL_RUNOUT_PIN 2
+#endif
+
+// Define digital pin 2 for the filament runout sensor 2.
+#ifndef FIL_RUNOUT2_PIN
+  #define FIL_RUNOUT2_PIN 15
+#endif
+
 //
 // Limit Switches
 //

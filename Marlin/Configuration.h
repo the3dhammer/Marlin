@@ -40,9 +40,32 @@
 /*
    Basic Options
 
-   Select Machine
+   Select Machine and Loadout
 */
-#define MACHINESV02
+//#define MACHINESV02_1
+//#define MACHINESV02_2
+//#define MACHINESV02_3
+#define MACHINESV02_4
+
+#if(ENABLED(MACHINESV02_1))
+  #define BLTOUCH
+  #define AUTO_BED_LEVELING_BILINEAR
+  #define MKS_MINI_12864_V3
+  #define NEOPIXEL_LED
+#elif(ENABLED(MACHINESV02_2))
+  #define BLTOUCH
+  #define AUTO_BED_LEVELING_BILINEAR
+  #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#elif(ENABLED(MACHINESV02_3))
+  #define BLTOUCH
+  #define MESH_BED_LEVELING
+  #define MKS_MINI_12864_V3
+  #define NEOPIXEL_LED
+#elif(ENABLED(MACHINESV02_4))
+  #define BLTOUCH
+  #define MESH_BED_LEVELING
+  #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#endif
 
 //===========================================================================
 //============================= Getting Started =============================
@@ -1251,7 +1274,7 @@
 /**
  * The BLTouch probe uses a Hall effect sensor and emulates a servo.
  */
-#define BLTOUCH
+//#define BLTOUCH
 
 /**
  * MagLev V4 probe by MDD
@@ -1646,10 +1669,10 @@
  * RAMPS-based boards use SERVO3_PIN for the first runout sensor.
  * For other boards you may need to define FIL_RUNOUT_PIN, FIL_RUNOUT2_PIN, etc.
  */
-//#define FILAMENT_RUNOUT_SENSOR
+#define FILAMENT_RUNOUT_SENSOR
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
-  #define FIL_RUNOUT_ENABLED_DEFAULT true // Enable the sensor on startup. Override with M412 followed by M500.
-  #define NUM_RUNOUT_SENSORS   1          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
+  #define FIL_RUNOUT_ENABLED_DEFAULT false // Enable the sensor on startup. Override with M412 followed by M500.
+  #define NUM_RUNOUT_SENSORS   2          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
 
   #define FIL_RUNOUT_STATE     LOW        // Pin state indicating that filament is NOT present.
   #define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
@@ -1693,7 +1716,7 @@
   // Commands to execute on filament runout.
   // With multiple runout sensors use the %c placeholder for the current tool in commands (e.g., "M600 T%c")
   // NOTE: After 'M412 H1' the host handles filament runout and this script does not apply.
-  #define FILAMENT_RUNOUT_SCRIPT "M600"
+  #define FILAMENT_RUNOUT_SCRIPT "M600 T%c"
 
   // After a runout is detected, continue printing this length of filament
   // before executing the runout script. Useful for a sensor at the end of
@@ -1748,7 +1771,7 @@
  */
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
-#define AUTO_BED_LEVELING_BILINEAR
+//#define AUTO_BED_LEVELING_BILINEAR
 //#define AUTO_BED_LEVELING_UBL
 //#define MESH_BED_LEVELING
 
@@ -1884,7 +1907,7 @@
 #if ENABLED(LCD_BED_LEVELING)
   #define MESH_EDIT_Z_STEP  0.025 // (mm) Step size while manually probing Z axis.
   #define LCD_PROBE_Z_RANGE 4     // (mm) Z Range centered on Z_MIN_POS for LCD Z adjustment
-  //#define MESH_EDIT_MENU        // Add a menu to edit mesh points
+  #define MESH_EDIT_MENU        // Add a menu to edit mesh points
 #endif
 
 // Add a menu item to move between bed corners for manual bed adjustment
@@ -2644,7 +2667,7 @@
 //
 // MKS MINI12864 V3 is an alias for FYSETC_MINI_12864_2_1. Type A/B. NeoPixel RGB Backlight.
 //
-#define MKS_MINI_12864_V3
+//#define MKS_MINI_12864_V3
 
 //
 // MKS LCD12864A/B with graphic controller and SD support. Follows MKS_MINI_12864 pinout.
@@ -3104,7 +3127,7 @@
 #endif
 
 // Support for Adafruit NeoPixel LED driver
-#define NEOPIXEL_LED
+//#define NEOPIXEL_LED
 #if ENABLED(NEOPIXEL_LED)
   #define NEOPIXEL_TYPE          NEO_RGB  // NEO_GRBW, NEO_RGBW, NEO_GRB, NEO_RBG, etc.
                                           // See https://github.com/adafruit/Adafruit_NeoPixel/blob/master/Adafruit_NeoPixel.h
