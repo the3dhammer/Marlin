@@ -42,10 +42,10 @@
 
    Select Machine and Loadout
 */
-//#define MACHINESV02_1
+#define MACHINESV02_1
 //#define MACHINESV02_2
 //#define MACHINESV02_3
-#define MACHINESV02_4
+//#define MACHINESV02_4
 
 #if(ENABLED(MACHINESV02_1))
   #define BLTOUCH
