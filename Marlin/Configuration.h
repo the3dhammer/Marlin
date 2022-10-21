@@ -37,36 +37,6 @@
  */
 #define CONFIGURATION_H_VERSION 02000905
 
-/*
-   Basic Options
-
-   Select Machine and Loadout
-*/
-#define MACHINESV02_1
-//#define MACHINESV02_2
-//#define MACHINESV02_3
-//#define MACHINESV02_4
-
-#if(ENABLED(MACHINESV02_1))
-  #define BLTOUCH
-  #define AUTO_BED_LEVELING_BILINEAR
-  #define MKS_MINI_12864_V3
-  #define NEOPIXEL_LED
-#elif(ENABLED(MACHINESV02_2))
-  #define BLTOUCH
-  #define AUTO_BED_LEVELING_BILINEAR
-  #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
-#elif(ENABLED(MACHINESV02_3))
-  #define BLTOUCH
-  #define MESH_BED_LEVELING
-  #define MKS_MINI_12864_V3
-  #define NEOPIXEL_LED
-#elif(ENABLED(MACHINESV02_4))
-  #define BLTOUCH
-  #define MESH_BED_LEVELING
-  #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
-#endif
-
 //===========================================================================
 //============================= Getting Started =============================
 //===========================================================================
@@ -117,7 +87,11 @@
 
 // Choose the name from boards.h that matches your setup
 #ifndef MOTHERBOARD
-  #define MOTHERBOARD BOARD_RAMPS_14_EFB
+  #if ANY(MACHINESV05)
+    #define MOTHERBOARD BOARD_CREALITY_V422
+  #else
+    #define MOTHERBOARD BOARD_RAMPS_14_EFB
+  #endif
 #endif
 
 /**
@@ -128,7 +102,12 @@
  *
  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
-#define SERIAL_PORT 0
+//#define SERIAL_PORT 1
+#if ANY(MACHINESV05)
+  #define SERIAL_PORT 1
+#else
+  #define SERIAL_PORT 0
+#endif
 
 /**
  * Serial Port Baud Rate
@@ -234,13 +213,21 @@
 
 // This defines the number of extruders
 // :[0, 1, 2, 3, 4, 5, 6, 7, 8]
-#define EXTRUDERS 2
+//#define EXTRUDERS 1
+#if ANY(MACHINESV02)
+  #define EXTRUDERS 2
+#else
+  #define EXTRUDERS 1
+#endif
 
 // Generally expected filament diameter (1.75, 2.85, 3.0, ...). Used for Volumetric, Filament Width Sensor, etc.
 #define DEFAULT_NOMINAL_FILAMENT_DIA 1.75
 
 // For Cyclops or any "multi-extruder" that shares a single nozzle.
-#define SINGLENOZZLE
+//#define SINGLENOZZLE
+#if ANY(MACHINESV02)
+  #define SINGLENOZZLE
+#endif
 
 // Save and restore temperature and fan speed on tool-change.
 // Set standby for the unselected tool with M104/106/109 T...
@@ -652,9 +639,9 @@
     #define DEFAULT_Ki_LIST {   1.08,   1.08 }
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
   #else
-    #define DEFAULT_Kp  22.20
-    #define DEFAULT_Ki   1.08
-    #define DEFAULT_Kd 114.00
+    #define DEFAULT_Kp  21.70
+    #define DEFAULT_Ki   1.54
+    #define DEFAULT_Kd  76.60
   #endif
 #endif
 
@@ -1002,14 +989,30 @@
 // Specify here all the endstop connectors that are connected to any endstop or probe.
 // Almost all printers will be using one per axis. Probes will use one or more of the
 // extra connectors. Leave undefined any used for non-endstop and non-probe purposes.
-#define USE_XMIN_PLUG
-#define USE_YMIN_PLUG
+//#define USE_XMIN_PLUG
+#if ANY(MACHINESV02)
+  #define USE_XMIN_PLUG
+#endif
+
+//#define USE_YMIN_PLUG
+#if ANY(MACHINESV02)
+  #define USE_YMIN_PLUG
+#endif
+
 #define USE_ZMIN_PLUG
 //#define USE_IMIN_PLUG
 //#define USE_JMIN_PLUG
 //#define USE_KMIN_PLUG
 //#define USE_XMAX_PLUG
+#if ANY(MACHINESV05)
+  #define USE_XMAX_PLUG
+#endif
+
 //#define USE_YMAX_PLUG
+#if ANY(MACHINESV05)
+  #define USE_YMAX_PLUG
+#endif
+
 //#define USE_ZMAX_PLUG
 //#define USE_IMAX_PLUG
 //#define USE_JMAX_PLUG
@@ -1114,7 +1117,12 @@
  * Override with M92
  *                                      X, Y, Z [, I [, J [, K]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 93, 93 }
+//#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 93 }
+#if ANY(MACHINESV02)
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 93, 93 }
+#else
+  #define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 400, 415 }
+#endif
 
 /**
  * Default Max Feed Rate (mm/s)
@@ -1217,10 +1225,16 @@
  * The probe replaces the Z-MIN endstop and is used for Z homing.
  * (Automatically enables USE_PROBE_FOR_Z_HOMING.)
  */
-#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+//#define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+#if ANY(MACHINESV02)
+  #define Z_MIN_PROBE_USES_Z_MIN_ENDSTOP_PIN
+#endif
 
 // Force the use of the probe for Z-axis homing
 //#define USE_PROBE_FOR_Z_HOMING
+#if ANY(MACHINESV05)
+  #define USE_PROBE_FOR_Z_HOMING
+#endif
 
 /**
  * Z_MIN_PROBE_PIN
@@ -1405,11 +1419,16 @@
  *     |    [-]    |
  *     O-- FRONT --+
  */
-#define NOZZLE_TO_PROBE_OFFSET { 50, -8, 0 }
+//#define NOZZLE_TO_PROBE_OFFSET { 10, 10, 0 }
+#if ANY(MACHINESV02)
+  #define NOZZLE_TO_PROBE_OFFSET { 50, -8, 0}
+#else
+  #define NOZZLE_TO_PROBE_OFFSET { 39.5, 7, 0 }
+#endif
 
 // Most probes should stay away from the edges of the bed, but
 // with NOZZLE_AS_PROBE this can be negative for a wider probing area.
-#define PROBING_MARGIN 40
+#define PROBING_MARGIN 30
 
 // X and Y axis travel speed (mm/min) between probes
 #define XY_PROBE_FEEDRATE (50*60)
@@ -1558,7 +1577,12 @@
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
 #define INVERT_X_DIR false
 #define INVERT_Y_DIR false
-#define INVERT_Z_DIR true
+//#define INVERT_Z_DIR false
+#if ANY(MACHINESV02)
+  #define INVERT_Z_DIR true
+#else
+  #define INVERT_Z_DIR false
+#endif
 //#define INVERT_I_DIR false
 //#define INVERT_J_DIR false
 //#define INVERT_K_DIR false
@@ -1594,8 +1618,19 @@
 
 // Direction of endstops when homing; 1=MAX, -1=MIN
 // :[-1,1]
-#define X_HOME_DIR -1
-#define Y_HOME_DIR -1
+//#define X_HOME_DIR -1
+#if ANY(MACHINESV02)
+  #define X_HOME_DIR -1
+#else
+  #define X_HOME_DIR 1
+#endif
+//#define Y_HOME_DIR -1
+#if ANY(MACHINESV02)
+  #define Y_HOME_DIR -1
+#else
+  #define Y_HOME_DIR 1
+#endif
+
 #define Z_HOME_DIR -1
 //#define I_HOME_DIR -1
 //#define J_HOME_DIR -1
@@ -1604,8 +1639,18 @@
 // @section machine
 
 // The size of the printable area
-#define X_BED_SIZE 300
-#define Y_BED_SIZE 250
+//#define X_BED_SIZE 300
+#if ANY(MACHINESV02)
+  #define X_BED_SIZE 300
+#else
+  #define X_BED_SIZE 220
+#endif
+//#define Y_BED_SIZE 250
+#if ANY(MACHINESV02)
+  #define Y_BED_SIZE 250
+#else
+  #define Y_BED_SIZE 220
+#endif
 
 // Travel limits (mm) after homing, corresponding to endstop positions.
 #define X_MIN_POS 0
@@ -1613,7 +1658,12 @@
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 310
+//#define Z_MAX_POS 310
+#if ANY(MACHINESV02)
+  #define Z_MAX_POS 310
+#else
+  #define Z_MAX_POS 300
+#endif
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
 //#define J_MIN_POS 0
@@ -1672,7 +1722,12 @@
 #define FILAMENT_RUNOUT_SENSOR
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
   #define FIL_RUNOUT_ENABLED_DEFAULT false // Enable the sensor on startup. Override with M412 followed by M500.
-  #define NUM_RUNOUT_SENSORS   2          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
+  //#define NUM_RUNOUT_SENSORS   1          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
+  #if ANY(MACHINESV02)
+    #define NUM_RUNOUT_SENSORS 2
+  #else
+    #define NUM_RUNOUT_SENSORS 1
+  #endif
 
   #define FIL_RUNOUT_STATE     LOW        // Pin state indicating that filament is NOT present.
   #define FIL_RUNOUT_PULLUP               // Use internal pullup for filament runout pins.
@@ -1716,7 +1771,12 @@
   // Commands to execute on filament runout.
   // With multiple runout sensors use the %c placeholder for the current tool in commands (e.g., "M600 T%c")
   // NOTE: After 'M412 H1' the host handles filament runout and this script does not apply.
-  #define FILAMENT_RUNOUT_SCRIPT "M600 T%c"
+  //#define FILAMENT_RUNOUT_SCRIPT "M600"
+  #if ANY(MACHINESV02)
+    #define FILAMENT_RUNOUT_SCRIPT "M600 T%c"
+  #else
+    #define FILAMENT_RUNOUT_SCRIPT "M600"
+  #endif
 
   // After a runout is detected, continue printing this length of filament
   // before executing the runout script. Useful for a sensor at the end of
@@ -1772,8 +1832,14 @@
 //#define AUTO_BED_LEVELING_3POINT
 //#define AUTO_BED_LEVELING_LINEAR
 //#define AUTO_BED_LEVELING_BILINEAR
+#if ENABLED(ABL_BIL)
+  #define AUTO_BED_LEVELING_BILINEAR
+#endif
 //#define AUTO_BED_LEVELING_UBL
 //#define MESH_BED_LEVELING
+#if ENABLED(MSH_BL)
+  #define MESH_BED_LEVELING
+#endif
 
 /**
  * Normally G28 leaves leveling disabled on completion. Enable one of
@@ -1838,7 +1904,7 @@
 #if EITHER(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
 
   // Set the number of grid points per dimension.
-  #define GRID_MAX_POINTS_X 3
+  #define GRID_MAX_POINTS_X 5
   #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
 
   // Probe along the Y axis, advancing X after each column
@@ -1950,7 +2016,11 @@
  * Useful to retract or move the Z probe out of the way.
  */
 //#define Z_PROBE_END_SCRIPT "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10"
-#define Z_PROBE_END_SCRIPT "G1 X173 Y125 F3000\nG1 Z0 F240"
+#if ANY(MACHINESV02)
+  #define Z_PROBE_END_SCRIPT "G1 X173 Y125 F3000\nG1 Z0 F240"
+#else
+  #define Z_PROBE_END_SCRIPT "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10"
+#endif
 
 // @section homing
 
@@ -2094,13 +2164,13 @@
 //
 #define PREHEAT_1_LABEL       "PLA"
 #define PREHEAT_1_TEMP_HOTEND 180
-#define PREHEAT_1_TEMP_BED     70
+#define PREHEAT_1_TEMP_BED     60
 #define PREHEAT_1_TEMP_CHAMBER 35
 #define PREHEAT_1_FAN_SPEED     0 // Value from 0 to 255
 
 #define PREHEAT_2_LABEL       "ABS"
 #define PREHEAT_2_TEMP_HOTEND 240
-#define PREHEAT_2_TEMP_BED    110
+#define PREHEAT_2_TEMP_BED    100
 #define PREHEAT_2_TEMP_CHAMBER 35
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
 
@@ -2592,6 +2662,10 @@
 // https://reprap.org/wiki/RepRapDiscount_Full_Graphic_Smart_Controller
 //
 //#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+#if ENABLED(DIS12864)
+  #define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
+  #define SDCARD_CONNECTION ONBOARD
+#endif
 
 //
 // K.3D Full Graphic Smart Controller
@@ -2668,6 +2742,12 @@
 // MKS MINI12864 V3 is an alias for FYSETC_MINI_12864_2_1. Type A/B. NeoPixel RGB Backlight.
 //
 //#define MKS_MINI_12864_V3
+#if ENABLED(MKSV3M12864)
+  #define MKS_MINI_12864_V3
+  #define NEOPIXEL_LED
+  #define SDCARD_CONNECTION LCD
+  #define LED_CONTROL_MENU
+#endif
 
 //
 // MKS LCD12864A/B with graphic controller and SD support. Follows MKS_MINI_12864 pinout.
@@ -2699,6 +2779,11 @@
 // (For CR-10 owners who want to replace the Melzi Creality board but retain the display)
 //
 //#define CR10_STOCKDISPLAY
+#if ENABLED(DISCR10)
+  #define CR10_STOCKDISPLAY
+  #define RET6_12864_LCD
+  #define SDCARD_CONNECTION ONBOARD
+#endif
 
 //
 // Ender-2 OEM display, a variant of the MKS_MINI_12864
@@ -3064,6 +3149,9 @@
 // which is not as annoying as with the hardware PWM. On the other hand, if this frequency
 // is too low, you should also increment SOFT_PWM_SCALE.
 //#define FAN_SOFT_PWM
+#if ANY(MACHINESV05)
+  #define FAN_SOFT_PWM
+#endif
 
 // Incrementing this by 1 will double the software PWM frequency,
 // affecting heaters, and the fan if FAN_SOFT_PWM is enabled.

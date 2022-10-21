@@ -35,8 +35,12 @@
  * from where the binary was downloaded or the source code was compiled.
  */
 
-#if(ENABLED(MACHINESV02_1) || ENABLED(MACHINESV02_2) || ENABLED(MACHINESV02_3) || ENABLED(MACHINESV02_4))
+#if(ENABLED(MACHINESV02))
   #define VerChar1 "SV02"
+  #define CUSTOM_MACHINE_NAME "T3DH SV02"
+#elif(ENABLED(MACHINESV05))
+  #define VerChar1 "SV05"
+  #define CUSTOM_MACHINE_NAME "T3DH SV05"
 #endif
 
 #if(ENABLED(BLTOUCH))
@@ -55,7 +59,7 @@
 
 #if(ENABLED(MKS_MINI_12864_V3))
   #define VerChar4 "MKSMV3"
-#elif(ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER))
+#elif(ENABLED(REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER) || ENABLED(CR10_STOCKDISPLAY))
   #define VerChar4 "12864"
 #endif
 
@@ -71,10 +75,7 @@
 /**
  * Defines a generic printer name to be output to the LCD after booting Marlin.
  */
-
-#if(ENABLED(MACHINESV02))
-  #define CUSTOM_MACHINE_NAME "T3DH SV02"
-#endif
+//#define MACHINE_NAME "3D Printer"
 
 /**
  * The SOURCE_CODE_URL is the location where users will find the Marlin Source

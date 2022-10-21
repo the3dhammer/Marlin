@@ -32,21 +32,6 @@
  */
 #define CONFIGURATION_ADV_H_VERSION 02000905
 
-/*
-   Basic Options
-
-   Select Machine and Loadout
-*/
-//#define MACHINESV02_1
-
-#if(ENABLED(MACHINESV02_1))
-  #define LED_CONTROL_MENU
-#elif(ENABLED(MACHINESV02_2))
-#elif(ENABLED(MACHINESV02_3))
-  #define LED_CONTROL_MENU
-#elif(ENABLED(MACHINESV02_4))
-#endif
-
 //===========================================================================
 //============================= Thermal Settings ============================
 //===========================================================================
@@ -905,7 +890,10 @@
    * differs, a mode set eeprom write will be completed at initialization.
    * Use the option below to force an eeprom write to a V3.1 probe regardless.
    */
-  #define BLTOUCH_SET_5V_MODE
+  //#define BLTOUCH_SET_5V_MODE
+  #if ANY(MACHINESV02)
+    #define BLTOUCH_SET_5V_MODE
+  #endif
 
   /**
    * Safety: Activate if connecting a probe with an unknown voltage mode.
@@ -1643,7 +1631,7 @@
    *
    * :[ 'LCD', 'ONBOARD', 'CUSTOM_CABLE' ]
    */
-  #define SDCARD_CONNECTION LCD
+  //#define SDCARD_CONNECTION LCD
 
   // Enable if SD detect is rendered useless (e.g., by using an SD extender)
   //#define NO_SD_DETECT
@@ -1993,12 +1981,15 @@
     #endif
   #endif
 
-  //#define BABYSTEP_DISPLAY_TOTAL          // Display total babysteps since last G28
+  #define BABYSTEP_DISPLAY_TOTAL          // Display total babysteps since last G28
 
   //#define BABYSTEP_ZPROBE_OFFSET          // Combine M851 Z and Babystepping
+  #if ENABLED(BLTOUCH)
+    #define BABYSTEP_ZPROBE_OFFSET
+  #endif
   #if ENABLED(BABYSTEP_ZPROBE_OFFSET)
     //#define BABYSTEP_HOTEND_Z_OFFSET      // For multiple hotends, babystep relative Z offsets
-    //#define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
+    #define BABYSTEP_ZPROBE_GFX_OVERLAY   // Enable graphical overlay on Z-offset editor
   #endif
 #endif
 
